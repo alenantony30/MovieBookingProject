@@ -15,7 +15,7 @@ public class BookingsDTO {
 	
 	String customerId;
 	int show_id;
-	Date bookingDate;
+//	Date bookingDate;
 	Double totalAmount;
 	String paymentMethod;
 	int seatNo;

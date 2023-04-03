@@ -43,7 +43,7 @@ public class TestController {
 		return movieServies.getMovies();
 	}
 	
-	@GetMapping("/getbookings")
+	//@GetMapping("/getbookings")
 	public List<Bookings> getBookings(){
 		return bookingServices.getAll();
 	}
