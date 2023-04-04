@@ -1,0 +1,79 @@
+select * from movies;
+
+select * from shows;
+
+select * from theatres;
+
+
+
+CREATE TABLE Movies (
+    movie_id SERIAL PRIMARY KEY,
+    movie_title VARCHAR(255) NOT NULL,
+    genre VARCHAR(255) NOT NULL,
+    director VARCHAR(255) NOT NULL,
+    duration INT NOT NULL,
+    rating DECIMAL(3,1) NOT NULL
+);
+
+
+
+CREATE TABLE Theatres (
+    theatre_id SERIAL PRIMARY KEY,
+    theatre_name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    seating_capacity INT NOT NULL
+);
+
+
+
+CREATE TABLE Shows (
+    show_id SERIAL PRIMARY KEY,
+    theatre_id INT NOT NULL,
+    movie_id INT NOT NULL,
+    show_date DATE NOT NULL,
+    show_time TIME NOT NULL,
+    available_seats INT NOT NULL,
+    FOREIGN KEY (theatre_id) REFERENCES Theatres(theatre_id),
+    FOREIGN KEY (movie_id) REFERENCES Movies(movie_id)
+);
+
+
+
+
+INSERT INTO Movies (movie_id, movie_title, genre, director, duration, rating) VALUES
+(11, 'The Shawshank Redemption', 'Drama', 'Frank Darabont', 142, 9.3),
+(2, 'The Godfather', 'Crime, Drama', 'Francis Ford Coppola', 175, 9.2),
+(3, 'The Dark Knight', 'Action, Crime, Drama', 'Christopher Nolan', 152, 9.0),
+(4, 'The Godfather: Part II', 'Crime, Drama', 'Francis Ford Coppola', 202, 9.0),
+(5, '12 Angry Men', 'Drama', 'Sidney Lumet', 96, 8.9),
+(6, 'Schindler''s List', 'Biography, Drama, History', 'Steven Spielberg', 195, 8.9),
+(7, 'The Lord of the Rings: The Return of the King', 'Adventure, Drama, Fantasy', 'Peter Jackson', 201, 8.9),
+(8, 'Pulp Fiction', 'Crime, Drama', 'Quentin Tarantino', 154, 8.9),
+(9, 'The Good, the Bad and the Ugly', 'Western', 'Sergio Leone', 178, 8.8),
+(10, 'Fight Club', 'Drama', 'David Fincher', 139, 8.8);
+
+
+INSERT INTO Theatres (theatre_id, theatre_name, location, seating_capacity) VALUES
+(11, 'AMC Empire 25', 'New York City', 900),
+(2, 'Cinemark Tinseltown and XD', 'Grapevine, TX', 800),
+(3, 'Regal Cinemas LA Live 14', 'Los Angeles', 900),
+(4, 'Cineplex Cinemas Yonge-Dundas and VIP', 'Toronto', 1000),
+(5, 'Vox Cinemas - Mall of the Emirates', 'Dubai', 1500),
+(6, 'CGV Cinemas Suwon', 'Suwon', 700),
+(7, 'Cinépolis Diana', 'Mexico City', 1000),
+(8, 'PVR Cinema', 'Bangalore', 1200),
+(9, 'Odeon Leicester Square', 'London', 1680),
+(10, 'Cinema City', 'Jerusalem', 800);
+
+INSERT INTO Shows (show_id, theatre_id, movie_id, show_date, show_time, available_seats) VALUES
+(11, 1, 1, '2023-04-03', '13:00', 800),
+(2, 2, 2, '2023-04-03', '14:30', 700),
+(3, 3, 3, '2023-04-04', '19:00', 850),
+(4, 4, 4, '2023-04-05', '18:00', 900),
+(5, 5, 5, '2023-04-06', '20:00', 1200),
+(6, 6, 6, '2023-04-07', '15:30', 500),
+(7, 7, 7, '2023-04-08', '21:00', 950),
+(8, 8, 8, '2023-04-09', '16:30', 1100),
+(9, 9, 9, '2023-04-10', '17:00', 1400),
+(10, 10, 10, '2023-04-11', '14:00', 600);
+

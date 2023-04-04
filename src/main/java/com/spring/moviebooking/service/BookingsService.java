@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.spring.moviebooking.dto.BookingsDTO;
 import com.spring.moviebooking.entity.Bookings;
 import com.spring.moviebooking.entity.Shows;
+import com.spring.moviebooking.exception.MovieException;
 import com.spring.moviebooking.repository.IBookingsRepository;
 import com.spring.moviebooking.repository.IShowsRepository;
 import com.spring.moviebooking.repository.ITheatresRepository;
@@ -24,7 +25,7 @@ import com.spring.moviebooking.repository.ITheatresRepository;
 public class BookingsService implements IBookingsService {
 
 	@Autowired
-	IBookingsRepository repo;
+	IBookingsRepository bookigRepo;
 
 	@Autowired
 	IShowsRepository showsRepo;
@@ -34,12 +35,13 @@ public class BookingsService implements IBookingsService {
 
 	@Override
 	public List<Bookings> getAll() {
-		// TODO Auto-generated method stub
-		return repo.findAll();
+
+		return bookigRepo.findAll();
+	
 	}
 
 	@Override
-	public Bookings bookTicket(BookingsDTO bookings) {
+	public Bookings bookTicket(BookingsDTO bookings) throws MovieException {
 		// TODO Auto-generated method stub
 		Shows show = showsRepo.findById(bookings.getShowId()).orElse(null);
 
@@ -54,10 +56,10 @@ public class BookingsService implements IBookingsService {
 			int theatreId = show.getTheatre().getTheatreId();
 			int showId = show.getShowId();
 			int seatNo = bookings.getSeatNo();
-			Long noOfBookedSeats = repo.getBookedCount(showId);
+			Long noOfBookedSeats = bookigRepo.getBookedCount(showId);
 			Long totalCapacity = theatresRepo.getTotalCapacity(theatreId);
 			int availableSeats = (int) (totalCapacity - noOfBookedSeats);
-			Long alreadyBooked = repo.getSeatNo(showId, seatNo);
+			Long alreadyBooked = bookigRepo.getSeatNo(showId, seatNo);
 
 			String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -93,72 +95,85 @@ public class BookingsService implements IBookingsService {
 								details.setShow(show);
 								details.setTotalAmount(bookings.getTotalAmount());
 
-								return repo.save(details);
+								return bookigRepo.save(details);
 							} else {
+								
 								// payment method should be DD CD UPI
-								System.out.println("DD,CD,UPI are only supported ,Payment method not supported");
-								return null;
+								System.out.println("DC,CC,UPI are only supported ,Payment method not supported");
+								throw(new MovieException("DC,CC,UPI are only supported ,Payment method not supported"));
+								
 							}
 						} else {
 							// film already started
 							System.out.println("Film Already started");
-							return null;
+							throw(new MovieException("Film Already started"));
+							//return null;
 						}
 					} else {
 						// Invalid Seat number
 						System.out.println("Invaild Seat Number");
-						return null;
+						throw(new MovieException("Invaild Seat Number"));
+						//return null;
 					}
 				} else {
 					// seat already booked
 					System.out.println("Seat already booked");
-					return null;
+					throw(new MovieException("Seat already booked"));
+					//return null;
 				}
 			} else {
 				System.out.println("House full");
-				return null;// house full
+				throw(new MovieException("House full"));
+				//return null;// house full
 
 			}
 		} else {
 			System.out.println("Invalid ShowID");
-			return null;
+			throw(new MovieException("Invalid ShowID"));
+			//return null;
 		}
 	}
 
 	@Override
-	public List<Bookings> getAllBookings() {
+	public List<Bookings> getAllMyBookings() {
 
 		String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
-		return repo.findByCustomerId(customerId);
+		return bookigRepo.findByCustomerId(customerId);
 	}
 
 	@Transactional
 	@Override
-	public String cancelBooking(int bookingId) {
+	public String cancelMyBooking(int bookingId) throws MovieException {
 		String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
 
-		Shows show = repo.getShowID(bookingId, customerId);
+		Shows show = bookigRepo.getShow(bookingId, customerId);
 		System.out.println(show);
 		if (show != null) {
 			Date showDate = show.getShowDate();
 			Time showTime = show.getShowTime();
 			LocalDateTime showDateAndTime = showDate.toLocalDate().atTime(showTime.toLocalTime());
 			LocalDateTime now = LocalDateTime.now();
+			int availableSeats=show.getAvailableSeats();
 
 			if (showDateAndTime.isAfter(now)) {
 				
-				repo.deleteByIdAndCustomerId(bookingId, customerId);
+				
+				bookigRepo.deleteByIdAndCustomerId(bookingId, customerId);
+				show.setAvailableSeats(availableSeats+1);
+				showsRepo.save(show);
 				return "Booking is cancelled and you will get the refund in 3 working days";
 
 			} else {
 			
 				
 				System.out.println("You cannot cancel the Show, its Already Started");
-				return "You cannot cancel the Show, its Already Started";
+				throw(new MovieException("You cannot cancel the Show, its Already Started"));
+				//return "You cannot cancel the Show, its Already Started";
 			}
 		} else {
 			System.out.println("Cannot find a show with the booking Id");
-			return "Cannot find a show with the booking Id";
+			throw(new MovieException("Cannot find a show with the booking Id"));
+			//return "Cannot find a show with the booking Id";
 		}
 
 	}

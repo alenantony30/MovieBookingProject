@@ -19,4 +19,10 @@ public class ShowsServices implements IShowsService {
 		return repo.findAll();
 	}
 
+	@Override
+	public List<Shows> searchShowsByTitle(String movieTitle) {
+		// TODO Auto-generated method stub
+		return repo.searchShowsByTitle(movieTitle.toLowerCase());
+	}
+
 }

@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.moviebooking.dto.BookingsDTO;
-import com.spring.moviebooking.dto.MoviesShowsTheatres;
 import com.spring.moviebooking.entity.Bookings;
 import com.spring.moviebooking.entity.Movies;
 import com.spring.moviebooking.entity.Shows;
 import com.spring.moviebooking.entity.Theatres;
+import com.spring.moviebooking.exception.MovieException;
 import com.spring.moviebooking.service.IBookingsService;
 import com.spring.moviebooking.service.IMoviesServices;
 import com.spring.moviebooking.service.IShowsService;
@@ -70,25 +70,26 @@ public class TestController {
 		return theatreServices.searchTheatresByKeyword(keyword);
 	}
 	
-	@GetMapping("/getmoviesandtheatres/{keyword}")
-	public List<MoviesShowsTheatres> getMoviesByTheatres(@PathVariable String keyword){
-		return movieServies.findMovieDetailsByTitle(keyword);
+	
+	@GetMapping("/getshows/{keyword}")
+	public List<Shows> getShowsByMovies(@PathVariable String keyword){
+		return showServices.searchShowsByTitle(keyword);
 	}
 	
 	@PostMapping("/bookticket")
-	public Bookings bookTicket(@RequestBody BookingsDTO booking) {
+	public Bookings bookTicket(@RequestBody BookingsDTO booking) throws MovieException {
 		return bookingServices.bookTicket(booking);
 	}
 	
-	@GetMapping("/getallbookings")
+	@GetMapping("/getmybookinghistory")
 	public List<Bookings> getAllBookings(){
-		return bookingServices.getAllBookings();
+		return bookingServices.getAllMyBookings();
 	}
 	
 	
 	@DeleteMapping("/cancelbooking/{bookingId}")
-	public String cancelBooking(@PathVariable int bookingId){
-		return bookingServices.cancelBooking(bookingId);
+	public String cancelBooking(@PathVariable int bookingId) throws MovieException{
+		return bookingServices.cancelMyBooking(bookingId);
 		
 	}
 }

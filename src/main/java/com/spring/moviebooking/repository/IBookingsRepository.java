@@ -12,18 +12,22 @@ import com.spring.moviebooking.entity.Shows;
 
 public interface IBookingsRepository extends JpaRepository<Bookings, Integer> {
 
+	//To cancel a booking
 	@Modifying
 	@Query("DELETE FROM Bookings b  WHERE b.bookingId = :bookingId AND b.customerId=:customerId ")
 	void deleteByIdAndCustomerId(@Param("bookingId") int bookingId, @Param("customerId") String customerId);
 
 	public List<Bookings> findByCustomerId(String customerId);
 
+	//To find number of tickets sold out for a show
 	@Query("SELECT COUNT(b) FROM Bookings b WHERE b.show.id = :showId")
 	public Long getBookedCount(@Param("showId") int showId);
 
+	//To check whether seat is already booked or not
 	@Query("SELECT COUNT(b) FROM Bookings b WHERE b.show.id = :showId AND b.seatNo = :seatNo")
 	public Long getSeatNo(@Param("showId") int showId, @Param("seatNo") int seatNo);
 	
+	//To get the show from the booking id for canceling the booking, To check whether show is started or not
 	@Query("SELECT b.show FROM Bookings b WHERE b.bookingId = :bookingId AND b.customerId=:customerId")
-	public Shows getShowID(@Param("bookingId")int bookingId, @Param("customerId") String customerId);
+	public Shows getShow(@Param("bookingId")int bookingId, @Param("customerId") String customerId);
 }
