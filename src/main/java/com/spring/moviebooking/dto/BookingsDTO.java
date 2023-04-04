@@ -13,7 +13,7 @@ public class BookingsDTO {
 
 	
 	
-	String customerId;
+	//String customerId;
 	int show_id;
 //	Date bookingDate;
 	Double totalAmount;

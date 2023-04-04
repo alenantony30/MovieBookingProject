@@ -12,6 +12,8 @@ public interface IBookingsService {
 	public Bookings bookTicket(BookingsDTO bookings);
 	
 	
+	public List<Bookings> getAllBookings();
+	
 
 	
 

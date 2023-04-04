@@ -79,4 +79,9 @@ public class TestController {
 		return bookingServices.bookTicket(booking);
 	}
 	
+	@GetMapping("/getallbookings")
+	public List<Bookings> getAllBookings(){
+		return bookingServices.getAllBookings();
+	}
+	
 }

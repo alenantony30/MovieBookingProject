@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.spring.moviebooking.dto.BookingsDTO;
@@ -54,8 +55,11 @@ public class BookingsService implements IBookingsService {
 		Long totalCapacity = theatresRepo.getTotalCapacity(theatreId);
 		int availableSeats = (int) (totalCapacity - noOfBookedSeats);
 		Long alreadyBooked = repo.getSeatNo(showId, seatNo);
-
-	/*	System.out.println("No of bookings= " + noOfBookedSeats);
+		
+		String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		    
+		    
+		/*	System.out.println("No of bookings= " + noOfBookedSeats);
 		System.out.println("capacity= " + totalCapacity);
 		System.out.println("Available seats = " + availableSeats);
 		System.out.println("Already booked = " + alreadyBooked);
@@ -79,7 +83,7 @@ public class BookingsService implements IBookingsService {
 
 							details.setSeatNo(bookings.getSeatNo());
 							details.setBookingDate(Date.valueOf(now.toLocalDate()));
-							details.setCustomerId(bookings.getCustomerId());
+							details.setCustomerId(customerId);
 							details.setPaymentMethod(bookings.getPaymentMethod());
 							details.setShow(show);
 							details.setTotalAmount(bookings.getTotalAmount());
@@ -110,6 +114,13 @@ public class BookingsService implements IBookingsService {
 			return null;// house full
 
 		}
+	}
+
+	@Override
+	public List<Bookings> getAllBookings() {
+		
+		String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		return repo.findByCustomerId(customerId);
 	}
 
 }
