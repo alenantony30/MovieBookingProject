@@ -14,7 +14,7 @@ public interface IBookingsService {
 	
 	public List<Bookings> getAllBookings();
 	
-
+	public String cancelBooking(int bookingId);
 	
 
 }

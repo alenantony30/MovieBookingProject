@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -39,88 +41,126 @@ public class BookingsService implements IBookingsService {
 	@Override
 	public Bookings bookTicket(BookingsDTO bookings) {
 		// TODO Auto-generated method stub
-		Shows show = showsRepo.findById(bookings.getShow_id()).orElse(null);
-		int theatreId = show.getTheatre().getTheatreId();
-		int showId = show.getShowId();
-		int seatNo = bookings.getSeatNo();
+		Shows show = showsRepo.findById(bookings.getShowId()).orElse(null);
 
-		Date showDate = show.getShowDate();
-		Time showTime = show.getShowTime();
-		String paymentMethod = bookings.getPaymentMethod();
+		if (show != null) {
+			Date showDate = show.getShowDate();
+			Time showTime = show.getShowTime();
+			String paymentMethod = bookings.getPaymentMethod();
 
-		LocalDateTime showDateAndTime = showDate.toLocalDate().atTime(showTime.toLocalTime());
-		LocalDateTime now = LocalDateTime.now();
+			LocalDateTime showDateAndTime = showDate.toLocalDate().atTime(showTime.toLocalTime());
+			LocalDateTime now = LocalDateTime.now();
 
-		Long noOfBookedSeats = repo.getBookedCount(showId);
-		Long totalCapacity = theatresRepo.getTotalCapacity(theatreId);
-		int availableSeats = (int) (totalCapacity - noOfBookedSeats);
-		Long alreadyBooked = repo.getSeatNo(showId, seatNo);
-		
-		String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
-		    
-		    
-		/*	System.out.println("No of bookings= " + noOfBookedSeats);
-		System.out.println("capacity= " + totalCapacity);
-		System.out.println("Available seats = " + availableSeats);
-		System.out.println("Already booked = " + alreadyBooked);
-		System.out.println("current time = " + now);
-		System.out.println("show time = " + showDateAndTime);*/
+			int theatreId = show.getTheatre().getTheatreId();
+			int showId = show.getShowId();
+			int seatNo = bookings.getSeatNo();
+			Long noOfBookedSeats = repo.getBookedCount(showId);
+			Long totalCapacity = theatresRepo.getTotalCapacity(theatreId);
+			int availableSeats = (int) (totalCapacity - noOfBookedSeats);
+			Long alreadyBooked = repo.getSeatNo(showId, seatNo);
 
-		if (availableSeats > 0) {
+			String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
 
-			if (alreadyBooked == 0) {
+			/*
+			 * System.out.println("No of bookings= " + noOfBookedSeats);
+			 * System.out.println("capacity= " + totalCapacity);
+			 * System.out.println("Available seats = " + availableSeats);
+			 * System.out.println("Already booked = " + alreadyBooked);
+			 * System.out.println("current time = " + now);
+			 * System.out.println("show time = " + showDateAndTime);
+			 */
 
-				if (seatNo <= totalCapacity && seatNo > 0) {
+			if (availableSeats > 0) {
 
-					if (showDateAndTime.isAfter(now)) {
+				if (alreadyBooked == 0) {
 
-						if (paymentMethod.equals("CC") || paymentMethod.equals("DC") || paymentMethod.equals("UPI")) {
+					if (seatNo <= totalCapacity && seatNo > 0) {
 
-							Bookings details = new Bookings();
+						if (showDateAndTime.isAfter(now)) {
 
-							System.out.println(show.getMovie().getMovieTitle());
-							show.setAvailableSeats(availableSeats - 1);
+							if (paymentMethod.equals("CC") || paymentMethod.equals("DC")
+									|| paymentMethod.equals("UPI")) {
 
-							details.setSeatNo(bookings.getSeatNo());
-							details.setBookingDate(Date.valueOf(now.toLocalDate()));
-							details.setCustomerId(customerId);
-							details.setPaymentMethod(bookings.getPaymentMethod());
-							details.setShow(show);
-							details.setTotalAmount(bookings.getTotalAmount());
+								Bookings details = new Bookings();
 
-							return repo.save(details);
+								System.out.println(show.getMovie().getMovieTitle());
+								show.setAvailableSeats(availableSeats - 1);
+
+								details.setSeatNo(bookings.getSeatNo());
+								details.setBookingDate(Date.valueOf(now.toLocalDate()));
+								details.setCustomerId(customerId);
+								details.setPaymentMethod(bookings.getPaymentMethod());
+								details.setShow(show);
+								details.setTotalAmount(bookings.getTotalAmount());
+
+								return repo.save(details);
+							} else {
+								// payment method should be DD CD UPI
+								System.out.println("DD,CD,UPI are only supported ,Payment method not supported");
+								return null;
+							}
 						} else {
-							// payment method should be DD CD UPI
-							System.out.println("DD,CD,UPI are only supported ,Payment method not supported");
+							// film already started
+							System.out.println("Film Already started");
 							return null;
 						}
 					} else {
-						// film already started
-						System.out.println("Film Already started");
+						// Invalid Seat number
+						System.out.println("Invaild Seat Number");
 						return null;
 					}
 				} else {
-					// Invalid Seat number
-					System.out.println("Invaild Seat Number");
+					// seat already booked
+					System.out.println("Seat already booked");
 					return null;
 				}
 			} else {
-				// seat already booked
-				System.out.println("Seat already booked");
-				return null;
+				System.out.println("House full");
+				return null;// house full
+
 			}
 		} else {
-			System.out.println("House full");
-			return null;// house full
-
+			System.out.println("Invalid ShowID");
+			return null;
 		}
 	}
 
 	@Override
 	public List<Bookings> getAllBookings() {
-		
+
 		String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
 		return repo.findByCustomerId(customerId);
+	}
+
+	@Transactional
+	@Override
+	public String cancelBooking(int bookingId) {
+		String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		Shows show = repo.getShowID(bookingId, customerId);
+		System.out.println(show);
+		if (show != null) {
+			Date showDate = show.getShowDate();
+			Time showTime = show.getShowTime();
+			LocalDateTime showDateAndTime = showDate.toLocalDate().atTime(showTime.toLocalTime());
+			LocalDateTime now = LocalDateTime.now();
+
+			if (showDateAndTime.isAfter(now)) {
+				
+				repo.deleteByIdAndCustomerId(bookingId, customerId);
+				return "Booking is cancelled and you will get the refund in 3 working days";
+
+			} else {
+			
+				
+				System.out.println("You cannot cancel the Show, its Already Started");
+				return "You cannot cancel the Show, its Already Started";
+			}
+		} else {
+			System.out.println("Cannot find a show with the booking Id");
+			return "Cannot find a show with the booking Id";
+		}
+
 	}
 
 }
