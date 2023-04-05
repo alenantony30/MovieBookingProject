@@ -37,6 +37,15 @@ CREATE TABLE Shows (
     FOREIGN KEY (movie_id) REFERENCES Movies(movie_id)
 );
 
+CREATE TABLE Ratings (
+    rating_id SERIAL PRIMARY KEY,
+    movie_id INT NOT NULL,
+    rating INT NOT NULL,
+    review  VARCHAR(255) NULL,
+    customer_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (movie_id) REFERENCES Movies(movie_id)
+);
+
 
 
 
