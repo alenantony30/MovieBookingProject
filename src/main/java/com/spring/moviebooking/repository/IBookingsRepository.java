@@ -17,6 +17,7 @@ public interface IBookingsRepository extends JpaRepository<Bookings, Integer> {
 	@Query("DELETE FROM Bookings b  WHERE b.bookingId = :bookingId AND b.customerId=:customerId ")
 	void deleteByIdAndCustomerId(@Param("bookingId") int bookingId, @Param("customerId") String customerId);
 
+	//To get all my bookings
 	public List<Bookings> findByCustomerId(String customerId);
 
 	//To find number of tickets sold out for a show
