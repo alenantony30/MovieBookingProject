@@ -56,6 +56,7 @@ public class BookingsService implements IBookingsService {
 			int theatreId = show.getTheatre().getTheatreId();
 			int showId = show.getShowId();
 			int seatNo = bookings.getSeatNo();
+			double ticketPrice=show.getTheatre().getTicketPrice();
 			Long noOfBookedSeats = bookigRepo.getBookedCount(showId);
 			Long totalCapacity = theatresRepo.getTotalCapacity(theatreId);
 			int availableSeats = (int) (totalCapacity - noOfBookedSeats);
@@ -93,7 +94,7 @@ public class BookingsService implements IBookingsService {
 								details.setCustomerId(customerId);
 								details.setPaymentMethod(bookings.getPaymentMethod());
 								details.setShow(show);
-								details.setTotalAmount(bookings.getTotalAmount());
+								details.setTotalAmount(ticketPrice);
 
 								return bookigRepo.save(details);
 							} else {

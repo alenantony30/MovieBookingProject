@@ -29,5 +29,8 @@ public class Theatres {
 	 String location;
 	 @Column(name="seating_capacity")
 	 int seatingCapacity;
+	 @Column(name="ticket_price")
+	 double ticketPrice;
+	 
 
 }

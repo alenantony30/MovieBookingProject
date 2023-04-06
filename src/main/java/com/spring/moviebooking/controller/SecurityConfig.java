@@ -23,20 +23,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		List <UserDetails> users=new ArrayList<>();
 		users.add(User.withDefaultPasswordEncoder()
-				.username("alnanto")
+				.username("alen")
 				.password("pass")
 				.roles("USER")
 				.build());
 		
 		users.add(User.withDefaultPasswordEncoder()
-				.username("aln")
-				.password("pass1")
+				.username("arun")
+				.password("pass")
 				.roles("USER")
 				.build());
 		
 		users.add(User.withDefaultPasswordEncoder()
-				.username("anto")
-				.password("pass2")
+				.username("ajay")
+				.password("pass")
 				.roles("USER")
 				.build());
 

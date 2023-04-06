@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,6 +39,7 @@ public class Bookings {
 	@Column(name="booking_date")
 	Date bookingDate;
 	
+	@Min(100)@Max(1000)
 	@Column(name="total_amount")
 	Double totalAmount;
 	
