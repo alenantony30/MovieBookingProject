@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import com.spring.moviebooking.dto.BookingsDTO;
 import com.spring.moviebooking.entity.Bookings;
 import com.spring.moviebooking.entity.Shows;
-import com.spring.moviebooking.exception.MovieException;
+import com.spring.moviebooking.exception.InvalidMovieException;
 import com.spring.moviebooking.repository.IBookingsRepository;
 import com.spring.moviebooking.repository.IShowsRepository;
 import com.spring.moviebooking.repository.ITheatresRepository;
@@ -41,7 +41,7 @@ public class BookingsService implements IBookingsService {
 	}
 
 	@Override
-	public Bookings bookTicket(BookingsDTO bookings) throws MovieException {
+	public Bookings bookTicket(BookingsDTO bookings) throws InvalidMovieException {
 		// TODO Auto-generated method stub
 		Shows show = showsRepo.findById(bookings.getShowId()).orElse(null);
 
@@ -59,6 +59,7 @@ public class BookingsService implements IBookingsService {
 			double ticketPrice=show.getTheatre().getTicketPrice();
 			Long noOfBookedSeats = bookigRepo.getBookedCount(showId);
 			Long totalCapacity = theatresRepo.getTotalCapacity(theatreId);
+			//show.getTheatre().getSeatingCapacity();
 			int availableSeats = (int) (totalCapacity - noOfBookedSeats);
 			Long alreadyBooked = bookigRepo.getSeatNo(showId, seatNo);
 
@@ -101,36 +102,36 @@ public class BookingsService implements IBookingsService {
 								
 								// payment method should be DD CD UPI
 								System.out.println("DC,CC,UPI are only supported ,Payment method not supported");
-								throw(new MovieException("DC,CC,UPI are only supported ,Payment method not supported"));
+								throw(new InvalidMovieException("DC,CC,UPI are only supported ,Payment method not supported"));
 								
 							}
 						} else {
 							// film already started
 							System.out.println("Film Already started");
-							throw(new MovieException("Film Already started"));
+							throw(new InvalidMovieException("Film Already started"));
 							//return null;
 						}
 					} else {
 						// Invalid Seat number
 						System.out.println("Invaild Seat Number");
-						throw(new MovieException("Invaild Seat Number"));
+						throw(new InvalidMovieException("Invaild Seat Number"));
 						//return null;
 					}
 				} else {
 					// seat already booked
 					System.out.println("Seat already booked");
-					throw(new MovieException("Seat already booked"));
+					throw(new InvalidMovieException("Seat already booked"));
 					//return null;
 				}
 			} else {
 				System.out.println("House full");
-				throw(new MovieException("House full"));
+				throw(new InvalidMovieException("House full"));
 				//return null;// house full
 
 			}
 		} else {
 			System.out.println("Invalid ShowID");
-			throw(new MovieException("Invalid ShowID"));
+			throw(new InvalidMovieException("Invalid ShowID"));
 			//return null;
 		}
 	}
@@ -144,7 +145,7 @@ public class BookingsService implements IBookingsService {
 
 	@Transactional
 	@Override
-	public String cancelMyBooking(int bookingId) throws MovieException {
+	public String cancelMyBooking(int bookingId) throws InvalidMovieException {
 		String customerId = SecurityContextHolder.getContext().getAuthentication().getName();
 
 		Shows show = bookigRepo.getShow(bookingId, customerId);
@@ -168,12 +169,12 @@ public class BookingsService implements IBookingsService {
 			
 				
 				System.out.println("You cannot cancel the Show, its Already Started");
-				throw(new MovieException("You cannot cancel the Show, its Already Started"));
+				throw(new InvalidMovieException("You cannot cancel the Show, its Already Started"));
 				//return "You cannot cancel the Show, its Already Started";
 			}
 		} else {
 			System.out.println("Cannot find a show with the booking Id");
-			throw(new MovieException("Cannot find a show with the booking Id"));
+			throw(new InvalidMovieException("Cannot find a show with the booking Id"));
 			//return "Cannot find a show with the booking Id";
 		}
 

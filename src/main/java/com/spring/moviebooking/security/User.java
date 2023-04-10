@@ -1,4 +1,4 @@
-package com.spring.moviebooking.controller;
+package com.spring.moviebooking.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

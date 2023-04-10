@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.spring.moviebooking.dto.RatingsDTO;
 import com.spring.moviebooking.entity.Ratings;
-import com.spring.moviebooking.exception.MovieException;
+import com.spring.moviebooking.exception.InvalidMovieException;
 
 public interface IRatingService {
 
 	
-	public Ratings addReview(RatingsDTO ratingsDTO) throws MovieException;
+	public Ratings addReview(RatingsDTO ratingsDTO) throws InvalidMovieException;
 	
 	public List<Ratings> getRatingsBymovieName(String moviename);
 }

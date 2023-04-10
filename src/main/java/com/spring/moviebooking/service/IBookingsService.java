@@ -4,18 +4,18 @@ import java.util.List;
 
 import com.spring.moviebooking.dto.BookingsDTO;
 import com.spring.moviebooking.entity.Bookings;
-import com.spring.moviebooking.exception.MovieException;
+import com.spring.moviebooking.exception.InvalidMovieException;
 
 public interface IBookingsService {
 	
 	public List<Bookings> getAll();
 	
-	public Bookings bookTicket(BookingsDTO bookings) throws MovieException;
+	public Bookings bookTicket(BookingsDTO bookings) throws InvalidMovieException;
 	
 	
 	public List<Bookings> getAllMyBookings();
 	
-	public String cancelMyBooking(int bookingId) throws MovieException;
+	public String cancelMyBooking(int bookingId) throws  InvalidMovieException;
 	
 
 }

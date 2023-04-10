@@ -1,4 +1,4 @@
-package com.spring.moviebooking.controller;
+package com.spring.moviebooking.security;
 
 import java.util.ArrayList;
 import java.util.List;

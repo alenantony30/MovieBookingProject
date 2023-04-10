@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.spring.moviebooking.dto.RatingsDTO;
 import com.spring.moviebooking.entity.Movies;
 import com.spring.moviebooking.entity.Ratings;
-import com.spring.moviebooking.exception.MovieException;
+import com.spring.moviebooking.exception.InvalidMovieException;
 import com.spring.moviebooking.repository.IMoviesRepository;
 import com.spring.moviebooking.repository.IRatingsRepository;
 
@@ -23,7 +23,7 @@ public class RatingService implements IRatingService {
 	IMoviesRepository movieRepo;
 
 	@Override
-	public Ratings addReview(RatingsDTO ratingsDTO) throws MovieException {
+	public Ratings addReview(RatingsDTO ratingsDTO) throws InvalidMovieException {
 		// TODO Auto-generated method stub
 		Movies movie = movieRepo.findById(ratingsDTO.getMovieId()).orElse(null);
 		Double userRating = ratingsDTO.getRating();
@@ -46,14 +46,14 @@ public class RatingService implements IRatingService {
 				return ratings;
 			}else {
 				System.out.println("Rating should be between 1 and 10");
-				throw (new MovieException("Rating should be between 1 and 10"));
+				throw (new InvalidMovieException("Rating should be between 1 and 10"));
 				
 			}
 
 		} else {
 
 			System.out.println("Cannot find the movie");
-			throw (new MovieException("Cannot find the movie"));
+			throw (new InvalidMovieException("Cannot find the movie"));
 			// return null;
 		}
 	}
