@@ -37,6 +37,18 @@ CREATE TABLE Shows (
     FOREIGN KEY (movie_id) REFERENCES Movies(movie_id)
 );
 
+CREATE TABLE Bookings (
+    booking_id INT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    show_id INT NOT NULL,
+    booking_date DATE,
+    total_amount DECIMAL(6,2),
+    payment_method VARCHAR(20),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
+    FOREIGN KEY (show_id) REFERENCES Shows(show_id)
+);
+
+
 CREATE TABLE Ratings (
     rating_id SERIAL PRIMARY KEY,
     movie_id INT NOT NULL,
