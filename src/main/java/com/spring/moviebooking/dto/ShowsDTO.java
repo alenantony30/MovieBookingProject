@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 
 public class ShowsDTO {
 
-	int showId;
-	Date showDate;
-	Time showTime;
-	int availableSeats;
+	private int showId;
+	private Date showDate;
+	private Time showTime;
+	private int availableSeats;
 
 }

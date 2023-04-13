@@ -25,20 +25,20 @@ public class Ratings {
 	@Id
 	@Column(name="rating_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	int ratingId;
+	private int ratingId;
 	
 	@Column(name="customer_id")
-	String customerId;
+	private String customerId;
 	
 	@ManyToOne
 	@JoinColumn(name = "movie_id")
 	private Movies movie;
 	
 	@Column(name="rating")
-	Double rating;
+	private Double rating;
 	
 	@Column(name="review")
-	String review;
+	private String review;
 
 
 }

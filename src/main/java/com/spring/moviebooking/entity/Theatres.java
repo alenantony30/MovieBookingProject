@@ -22,15 +22,15 @@ public class Theatres {
 
 	@Id
 	 @Column(name="theatre_id")
-	 int theatreId;
+	private  int theatreId;
 	 @Column(name="theatre_name")
-	 String theatreName;
+	 private String theatreName;
 	 @Column(name="location")
-	 String location;
+	 private String location;
 	 @Column(name="seating_capacity")
-	 int seatingCapacity;
+	 private int seatingCapacity;
 	 @Column(name="ticket_price")
-	 double ticketPrice;
+	 private double ticketPrice;
 	 
 
 }

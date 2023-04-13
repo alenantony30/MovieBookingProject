@@ -27,25 +27,25 @@ public class Bookings {
 	@Id
 	@Column(name="booking_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	int bookingId;
+	private int bookingId;
 	
 	@Column(name="customer_id")
-	String customerId;
+	private String customerId;
 	
 	@ManyToOne
 	@JoinColumn(name = "show_id")
 	private Shows show;
 	
 	@Column(name="booking_date")
-	Date bookingDate;
+	private Date bookingDate;
 	
 	@Min(100)@Max(1000)
 	@Column(name="total_amount")
-	Double totalAmount;
+	private Double totalAmount;
 	
 	@Column(name="payment_method")
-	String paymentMethod;
+	private String paymentMethod;
 	
 	@Column(name="seat_no")
-	int seatNo;
+	private int seatNo;
 }

@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Shows {
 	@Id
 	@Column(name = "show_id")
-	int showId;
+	private int showId;
 
 	@ManyToOne
 	@JoinColumn(name = "theatre_id")
@@ -33,12 +33,12 @@ public class Shows {
 	private Movies movie;
 
 	@Column(name = "show_date")
-	Date showDate;
+	private Date showDate;
 
 	@Column(name = "show_time")
-	Time showTime;
+	private Time showTime;
 
 	@Column(name = "available_seats")
-	int availableSeats;
+	private int availableSeats;
 
 }

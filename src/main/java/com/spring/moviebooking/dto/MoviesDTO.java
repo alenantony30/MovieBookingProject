@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 public class MoviesDTO {
 
-		int movieId;
-		String movieTitle;
-		String genre;
-		String director;
-		int duration;
-		double rating;
+	private int movieId;
+	private String movieTitle;
+	private String genre;
+	private String director;
+	private int duration;
+	private double rating;
 	
 }

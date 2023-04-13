@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class TheatresDTO {
 
-	int theatreId;
-	String theatreName;
-	String location;
-	int seatingCapacity;
+	private int theatreId;
+	private String theatreName;
+	private String location;
+	private int seatingCapacity;
 
 }

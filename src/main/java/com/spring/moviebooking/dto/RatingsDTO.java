@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 public class RatingsDTO {
 	
 
-	int  movieId;
+	private int  movieId;
 
-	Double rating;
+	private Double rating;
 
-	String review;
+	private String review;
 
 
 }

@@ -18,12 +18,12 @@ import lombok.NoArgsConstructor;
 public class Movies {
 	@Id
 	@Column(name="movie_id")
-	int movieId;
+	private int movieId;
 	@Column(name="movie_title")
-	String movieTitle;
-	String genre;
-	String director;
-	int duration;
-	double rating;
+	private String movieTitle;
+	private String genre;
+	private String director;
+	private int duration;
+	private double rating;
 
 }
