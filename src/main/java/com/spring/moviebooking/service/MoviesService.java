@@ -16,13 +16,13 @@ public class MoviesService implements IMoviesServices {
 
 	@Override
 	public List<Movies> getMovies() {
-		// TODO Auto-generated method stub
+		
 		return repo.findAll();
 	}
 
 	@Override
 	public List<Movies> searchMoviesByKeyword(String keyword) {
-		// TODO Auto-generated method stub
+		
 		return repo.searchMoviesByKeyword(keyword.toLowerCase());
 	}
 

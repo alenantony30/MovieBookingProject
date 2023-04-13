@@ -15,13 +15,13 @@ public class TheatresServices implements ITheatresService {
 	
 	@Override
 	public List<Theatres> getTheatres() {
-		// TODO Auto-generated method stub
+		
 		return repo.findAll();
 	}
 
 	@Override
 	public List<Theatres> searchTheatresByKeyword(String keyword) {
-		// TODO Auto-generated method stub
+		
 		return repo.searchTheatresByKeyword(keyword.toLowerCase());
 	}
 

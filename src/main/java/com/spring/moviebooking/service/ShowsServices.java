@@ -15,13 +15,13 @@ public class ShowsServices implements IShowsService {
 	
 	@Override
 	public List<Shows> getShows() {
-		// TODO Auto-generated method stub
+		
 		return repo.findAll();
 	}
 
 	@Override
 	public List<Shows> searchShowsByTitle(String movieTitle) {
-		// TODO Auto-generated method stub
+		
 		return repo.searchShowsByTitle(movieTitle.toLowerCase());
 	}
 

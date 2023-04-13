@@ -13,6 +13,8 @@ import com.spring.moviebooking.exception.InvalidMovieException;
 import com.spring.moviebooking.repository.IMoviesRepository;
 import com.spring.moviebooking.repository.IRatingsRepository;
 
+import lombok.extern.log4j.Log4j2;
+@Log4j2
 @Service
 public class RatingService implements IRatingService {
 
@@ -24,7 +26,7 @@ public class RatingService implements IRatingService {
 
 	@Override
 	public Ratings addReview(RatingsDTO ratingsDTO) throws InvalidMovieException {
-		// TODO Auto-generated method stub
+		
 		Movies movie = movieRepo.findById(ratingsDTO.getMovieId()).orElse(null);
 		Double userRating = ratingsDTO.getRating();
 		if (movie != null) {
@@ -45,22 +47,22 @@ public class RatingService implements IRatingService {
 				
 				return ratings;
 			}else {
-				System.out.println("Rating should be between 1 and 10");
+				log.error("Rating should be between 1 and 10");
 				throw (new InvalidMovieException("Rating should be between 1 and 10"));
 				
 			}
 
 		} else {
 
-			System.out.println("Cannot find the movie");
+			log.error("Cannot find the movie");
 			throw (new InvalidMovieException("Cannot find the movie"));
-			// return null;
+			
 		}
 	}
 
 	@Override
 	public List<Ratings> getRatingsBymovieName(String moviename) {
-		// TODO Auto-generated method stub
+		
 		return ratingRepo.findRatingsByMovieTitle(moviename.toLowerCase());
 	}
 
