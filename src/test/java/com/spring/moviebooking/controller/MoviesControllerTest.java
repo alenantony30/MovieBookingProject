@@ -19,6 +19,7 @@ class MoviesControllerTest {
 	@Test
 	void testSearchMovies() {
 		RestTemplateBuilder restTemplateBuilder=new RestTemplateBuilder();
+		
 		this.restTemplate = restTemplateBuilder
 	            .basicAuthentication("arun", "pass")
 	            .build();
